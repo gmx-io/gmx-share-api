@@ -1,12 +1,14 @@
 // API for creating the og image on the social media
 
+import allowCors from "../utils/allowCors"
+
 function getImageUrl(query) {
   const folderName = "gmx"
   const baseUrl = "https://res.cloudinary.com/gmx/image/upload"
   return `${baseUrl}/${folderName}/${query.id}.jpg`
 }
 
-export default function handler(req, res) {
+function handler(req, res) {
   const { query } = req
   const imageUrl = getImageUrl(query)
   const rootRedirectURL = "https://gmx.io/#/";
@@ -51,3 +53,5 @@ export default function handler(req, res) {
   res.setHeader("Content-Type", "text/html")
   res.end(html)
 }
+
+export default allowCors(handler)

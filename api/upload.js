@@ -1,3 +1,5 @@
+import allowCors from "../utils/allowCors"
+
 const cloudinary = require("cloudinary").v2
 
 cloudinary.config({
@@ -18,7 +20,7 @@ function uploadScreenshot(screenshot) {
   })
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method === "OPTIONS") {
     return res.status(200).send("ok")
   }
@@ -37,3 +39,5 @@ export default async function handler(req, res) {
     console.error(error)
   }
 }
+
+export default allowCors(handler)
