@@ -1,18 +1,21 @@
 // API for creating the og image on the social media
 
 import allowCors from "../utils/allowCors"
+import { sanatizeId, sanatizeRef } from "../utils/sanatizeInput"
 
 function getImageUrl(query) {
+  const sanatizedId = sanatizeId(query.id)
   const folderName = "gmx"
   const baseUrl = "https://res.cloudinary.com/gmx/image/upload"
-  return `${baseUrl}/${folderName}/${query.id}.jpg`
+  return `${baseUrl}/${folderName}/${sanatizedId}.jpg`
 }
 
 function handler(req, res) {
   const { query } = req
   const imageUrl = getImageUrl(query)
-  const rootRedirectURL = "https://gmx.io/#/";
-  const referralParameter = query.ref ? `?ref=${query.ref}` : ''
+  const sanatizedRef = sanatizeRef(query.ref)
+  const rootRedirectURL = "https://gmx.io/#/"
+  const referralParameter = sanatizedRef ? `?ref=${sanatizedRef}` : ""
   const html = `
     <!doctype html>
     <html lang="en">
@@ -54,4 +57,4 @@ function handler(req, res) {
   res.end(html)
 }
 
-export default allowCors(handler)
+export default allowCors(handler, true)
