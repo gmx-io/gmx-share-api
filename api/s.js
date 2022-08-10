@@ -41,7 +41,7 @@ export default function handler(req, res) {
     </body>
     <script>
       setTimeout(() => {
-          window.location.href = ${rootRedirectURL + referralParameter}
+          window.location.href = "${rootRedirectURL + referralParameter}"
       }, 100);
     </script>
     </html>
