@@ -1,5 +1,3 @@
-// API for creating the og image on the social media
-
 import allowCors from "../utils/allowCors"
 import { sanatizeId, sanatizeRef } from "../utils/sanatizeInput"
 
@@ -51,7 +49,6 @@ function handler(req, res) {
     </script>
     </html>
   `
-
   res.statusCode = 200
   res.setHeader("Content-Type", "text/html")
   res.end(html)
