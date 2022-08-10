@@ -3,7 +3,7 @@
 function getImageUrl(query) {
   const folderName = "gmx"
   const baseUrl = "https://res.cloudinary.com/gmx/image/upload"
-  return `${baseUrl}/${folderName}/${query.id}.jpeg`
+  return `${baseUrl}/${folderName}/${query.id}.jpg`
 }
 
 export default function handler(req, res) {
