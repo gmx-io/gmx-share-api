@@ -13,7 +13,7 @@ function handler(req, res) {
   const imageUrl = getImageUrl(query)
   const ref = sanitizeRef(query.ref)
   const rootRedirectURL = "https://gmx.io/#/"
-  const referralParameter = sanatizedRef ? `?ref=${ref}` : ""
+  const referralParameter = ref ? `?ref=${ref}` : ""
   const html = `
     <!doctype html>
     <html lang="en">
