@@ -1,19 +1,19 @@
 import allowCors from "../utils/allowCors"
-import { sanatizeId, sanatizeRef } from "../utils/sanatizeInput"
+import { sanitizeId, sanitizeRef } from "../utils/sanitizeInput"
 
 function getImageUrl(query) {
-  const sanatizedId = sanatizeId(query.id)
+  const id = sanitizeId(query.id)
   const folderName = "gmx"
   const baseUrl = "https://res.cloudinary.com/gmx/image/upload"
-  return `${baseUrl}/${folderName}/${sanatizedId}.jpg`
+  return `${baseUrl}/${folderName}/${id}.jpg`
 }
 
 function handler(req, res) {
   const { query } = req
   const imageUrl = getImageUrl(query)
-  const sanatizedRef = sanatizeRef(query.ref)
+  const ref = sanitizeRef(query.ref)
   const rootRedirectURL = "https://gmx.io/#/"
-  const referralParameter = sanatizedRef ? `?ref=${sanatizedRef}` : ""
+  const referralParameter = sanatizedRef ? `?ref=${ref}` : ""
   const html = `
     <!doctype html>
     <html lang="en">
