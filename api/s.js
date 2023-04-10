@@ -19,7 +19,6 @@ function handler(req, res) {
     <html lang="en">
     <head>
     <meta charset="utf-8" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="title" content="GMX | Decentralized Perpetual Exchange" />
     <meta name="description" content="" />
@@ -52,6 +51,7 @@ function handler(req, res) {
   `
   res.statusCode = 200
   res.setHeader("Content-Type", "text/html")
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate")
   res.end(html)
 }
 
