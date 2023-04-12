@@ -51,6 +51,7 @@ function handler(req, res) {
   `
   res.statusCode = 200
   res.setHeader("Content-Type", "text/html")
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate")
   res.end(html)
 }
 
