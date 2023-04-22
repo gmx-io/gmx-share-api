@@ -1,6 +1,12 @@
 import allowCors from "../utils/allowCors"
 import { sanitizeId, sanitizeRef } from "../utils/sanitizeInput"
 
+const SEO = {
+  description:
+    "Trade spot or perpetual BTC, ETH, AVAX and other top cryptocurrencies with up to 50x leverage directly from your wallet on Arbitrum and Avalanche.",
+  title: "GMX | Decentralized Perpetual Exchange",
+}
+
 function getImageUrl(query) {
   const id = sanitizeId(query.id)
   const folderName = "gmx"
@@ -20,20 +26,20 @@ function handler(req, res) {
     <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="title" content="GMX | Decentralized Perpetual Exchange" />
-    <meta name="description" content="" />
+    <meta name="title" content="${SEO.title}" />
+    <meta name="description" content="${SEO.description}" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:url" content="${imageUrl}" />
     <meta property="og:site_name" content="GMX" />
-    <meta property="og:title" content="GMX | Decentralized Perpetual Exchange" />
-    <meta property="og:description" content="" />
+    <meta property="og:title" content="${SEO.title}" />
+    <meta property="og:description" content="${SEO.description}" />
     <meta property="og:image" content="${imageUrl}" />
     <meta property="og:image:width" content="1024" />
     <meta property="og:image:height" content="512" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:description" content="Trade spot or perpetual BTC, ETH, AVAX and other top cryptocurrencies with up to 30x leverage directly from your wallet on Arbitrum and Avalanche." />
-    <meta name="twitter:title" content="GMX | Decentralized Perpetual Exchange" />
+    <meta name="twitter:description" content="${SEO.description}" />
+    <meta name="twitter:title" content="${SEO.title}" />
     <meta name="twitter:image" content="${imageUrl}" />
     <meta property="og:image" content="${imageUrl}" />
     <meta property="og:image:type" content="image/png" />
