@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "develop": "vercel dev",
-    "deploy": "vercel"
+    "deploy": "vercel",
+    "test": "node --test --test-concurrency=3 tests/*.test.js"
   },
   "dependencies": {
     "cloudinary": "^1.30.1"
