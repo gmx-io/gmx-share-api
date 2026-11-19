@@ -1,6 +1,7 @@
 import allowCors from "../utils/allowCors.js"
 import escapeHtml from "../utils/escapeHtml.js"
 import { sanitizeId, sanitizeRef } from "../utils/sanitizeInput.js"
+import { getImageUrl, isR2Image } from "../utils/imageStorage.js"
 
 const SEO = {
   description:
@@ -23,10 +24,8 @@ function handler(req, res) {
   const isRewards = query.page === "rewards"
   const seo = isRewards ? REWARDS_SEO : SEO
   const shortDescription = seo.shortDescription ?? seo.description
-  const imageUrl = id
-    ? `https://res.cloudinary.com/gmx/image/upload/gmx/${id}.jpg`
-    : "https://gmx.io/og.png"
-  const imageType = id ? "image/jpeg" : "image/png"
+  const imageUrl = id ? getImageUrl(id) : "https://gmx.io/og.png"
+  const imageType = id && !isR2Image(id) ? "image/jpeg" : "image/png"
   const imageAlt = id
     ? isRewards
       ? "GMX Rewards referral card"

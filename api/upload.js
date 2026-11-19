@@ -1,42 +1,49 @@
-import allowCors from "../utils/allowCors"
+import sharp from "sharp"
+import allowCors from "../utils/allowCors.js"
+import { storeImage } from "../utils/imageStorage.js"
 
-const cloudinary = require("cloudinary").v2
-
-cloudinary.config({
-  cloud_name: "gmx",
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET
-})
-
-function uploadScreenshot(screenshot) {
-  return new Promise((resolve, reject) => {
-    const uploadOptions = { folder: "gmx" }
-    cloudinary.uploader
-      .upload_stream(uploadOptions, (error, result) => {
-        if (error) reject(error)
-        else resolve(result)
-      })
-      .end(screenshot)
-  })
-}
+const MAX_IMAGE_BYTES = 2 * 1024 * 1024
 
 async function handler(req, res) {
-  if (req.method === "OPTIONS") {
-    return res.status(200).send("ok")
+  res.setHeader("Cache-Control", "no-store")
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST, OPTIONS")
+    return res.status(405).end("Method not allowed")
+  }
+  if (!Buffer.isBuffer(req.body) || !req.body.length) {
+    return res.status(400).end("Expected image bytes")
+  }
+  if (req.body.length > MAX_IMAGE_BYTES) {
+    return res.status(413).end("Image exceeds 2 MiB")
+  }
+
+  let image
+  try {
+    const decoder = sharp(req.body, {
+      limitInputPixels: 4000000,
+      failOn: "warning",
+    })
+    const metadata = await decoder.metadata()
+    if (
+      !["png", "jpeg", "webp"].includes(metadata.format) ||
+      (metadata.pages || 1) !== 1
+    ) {
+      return res.status(415).end("Expected a static PNG, JPEG, or WebP image")
+    }
+    image = await decoder.png().toBuffer()
+  } catch {
+    return res.status(400).end("Invalid image")
+  }
+  if (image.length > MAX_IMAGE_BYTES) {
+    return res.status(413).end("Image exceeds 2 MiB")
   }
   try {
-    let imageInfo = await uploadScreenshot(req.body)
-    res.statusCode = 200
-    res.json({
-      image: imageInfo.url,
-      version: imageInfo.version,
-      id: imageInfo.public_id.split("/")[1]
-    })
+    const imageInfo = await storeImage(image)
+    res.setHeader("Content-Type", "application/json")
+    res.status(200).end(JSON.stringify(imageInfo))
   } catch (error) {
-    res.statusCode = 500
-    res.setHeader("Content-Type", "text/html")
-    res.end("<h1>Internal Error</h1><p>Sorry, there was a problem</p>")
-    console.error(error)
+    console.error("Share image storage failed", error.name)
+    res.status(503).end("Image storage unavailable")
   }
 }
 
